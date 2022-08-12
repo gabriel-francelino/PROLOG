@@ -1,2 +1,1 @@
-# Atividade_Presenca_Ordenacao_Prolog
-Atividade da disciplina Programação Lógica.
+Códigos de aulas e exercícios de prolog.
