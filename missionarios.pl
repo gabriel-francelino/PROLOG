@@ -85,31 +85,31 @@ traduz(tc2, 'volta dois canibais').
 traduz(vmc, 'vai um missionário e um canibal').
 traduz(tmc, 'volta um missionário e um canibal').
 
-%operações para levar e trazer das margens
+%operações para levar e trazer das margens - prolog não esta considerando o ou (;)
 oper(levaM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :- 
     M1>0, M2=<3, L==1, A is M1-1, B is M2+1,
-    A>=C1, (B>=C2; C2==1).
+    (C2==1; B>=C2), A>=C1.
 oper(trazM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :- 
-    M2>0, M1=<3, L==2, A is M1+1, B is M2-1, 
-    (A>=C1; C1==1), B>=C2.
+    M2>0, M1=<3, L==2, A is M1+1, B is M2-1,
+    ((C1==1; A>=C1), B>=C2).
 oper(levaC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
     C1>0, C2=<3, L==1, A is C1-1, B is C2+1,
-    M1>=A, (M2>=B; M2==0).
+    ((M2==0; M2>=B), M1>=A).
 oper(trazC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
     C2>0, C1=<3, L==2, A is C1+1, B is C2-1,
-    (M1>=A; M1==0), M2>=B.
+    ((M1==0; M1>=A), M2>=B).
 oper(levaMM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :-
     M1>0, M2=<3, L==1, A is M1-2, B is M2+2,
-    A>=C1, (B>=C2; C2==1).
+    ((A==0; A>=C1), (B>=C2)).
 oper(trazMM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :-
     M2>0, M1=<3, L==2, A is M1+2, B is M2-2,
-    (A>=C1; C1==1), B>=C2.
+    ((B==0; B>=C2),(A>=C1)).
 oper(levaCC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
     C1>0, C2=<3, L==1, A is C1-2, B is C2+2,
-    M1>=A, (M2>=B; M2==0).
+    ((M2==0; M2>=B),M1>=A).
 oper(trazCC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
     C2>0, C1=<3, L==2, A is C1+2, B is C2-2,
-    (M1>=A; M1==0), M2>=B.
+    ((M1==0; M1>=A), M2>=B).
 oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
     M1>0, M2=<3, L==1, C1>0, C2=<3,
     A is M1-1, B is M2+1, C is C1-1, D is C2+1,
