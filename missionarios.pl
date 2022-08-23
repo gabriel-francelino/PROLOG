@@ -24,7 +24,7 @@ busca([Caminho|Lista], Solucao) :-
     Tipo = 2 -> ap(EXT, Lista, Lista1)),
    busca(Lista1, Solucao).
 
-naorepete(X,C) :- not(in(_-X,C)).
+naorepete(_-X,C) :- not(in(_-X,C)).
 
 estende([OperacaoX-EstadoA|Caminho], [OperacaoY-EstadoB,OperacaoX-EstadoA|Caminho]) :-
    oper(OperacaoY,EstadoA,EstadoB),
