@@ -30,11 +30,24 @@ estende([OperacaoX-EstadoA|Caminho], [OperacaoY-EstadoB,OperacaoX-EstadoA|Caminh
    oper(OperacaoY,EstadoA,EstadoB),
    naorepete(OperacaoY-EstadoB,Caminho).
 
-margem([F,L,C,R], M) :-
-   (F = M -> write('F'); write(' ')),
-   (L = M -> write('L'); write(' ')),
-   (C = M -> write('C'); write(' ')),
-   (R = M -> write('R'); write(' ')).
+margem([M,C], X) :-
+   (X==1, M==3 -> write('MMM'); write(' ')),
+   (X==1, M==2 -> write('MM'); write(' ')),
+   (X==1, M==1 -> write('M'); write(' ')),
+   (X==1, M==0 -> write(''); write(' ')),
+   (X==1, C==3 -> write('CCC'); write(' ')),
+   (X==1, C==2 -> write('CC'); write(' ')),
+   (X==1, C==1 -> write('C'); write(' ')),
+   (X==1, C==0 -> write(''); write(' ')),
+   (X==2, M==3 -> write('MMM'); write(' ')),
+   (X==2, M==2 -> write('MM'); write(' ')),
+   (X==2, M==1 -> write('M'); write(' ')),
+   (X==2, M==0 -> write(''); write(' ')),
+   (X==2, C==3 -> write('CCC'); write(' ')),
+   (X==2, C==2 -> write('CC'); write(' ')),
+   (X==2, C==1 -> write('C'); write(' ')),
+   (X==2, C==0 -> write(''); write(' ')).
+
 
 desenha(Estado) :-
      write('    '), margem(Estado, a), write('|    |'), margem(Estado,b).
@@ -85,9 +98,17 @@ traduz(tc2, 'volta dois canibais').
 traduz(vmc, 'vai um missionário e um canibal').
 traduz(tmc, 'volta um missionário e um canibal').
 
-seguro(lM,M1,C1,T) :- (M1-T==0; M1-T>=C1), (3-C1==0; 3-C1-3-M1=<T).
-seguro(lC,M1,C1,T) :- (3-M1==0); (3-M1-3-C1>=T).
-seguro(lMC,M1,C1) :- (3-C1==0); (3-C1)=<(3-M1).
+% [Ma,Ca,Mb,Cb,L], margem em que está cada elemento
+inicial([3,3,0,0,1]).
+meta([0,0,3,3,2]).
+
+% seguro(lM,M1,C1,T) :- X is M1-T, Y is 3-C1, Z is Y-3-M1, (X==0; X>=C1), (Y==0; Z=<T).
+% seguro(lC,M1,C1,T) :- X is 3-M1, Y is X-3-C1, (X==0); (Y>=T).
+% seguro(lMC,M1,C1) :- X is 3-C1, Y is 3-M1, (X==0); (X)=<(Y).
+
+seguro(lM,M1,C1,T) :- (X==0; X>=C1), (Y==0; Z=<T), X is M1-T, Y is 3-C1, Z is Y-3-M1.
+seguro(lC,M1,C1,T) :- (X==0); (Y>=T), X is 3-M1, Y is X-3-C1.
+seguro(lMC,M1,C1) :- (X==0); (X)=<(Y), X is 3-C1, Y is 3-M1.
     
 %operações para levar e trazer das margens - prolog não esta considerando o ou (;)
 oper(levaM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :- 
@@ -113,6 +134,3 @@ oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
 oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
     M2>=1, C2>=1, L==2, seguro(lM,M2,C2), A is M1+1, B is M2-1, C is C1+1, D is C2-1.
 
-% [Ma,Ca,Mb,Cb,L], margem em que está cada elemento
-inicial([3,3,0,0,1]).
-meta([0,0,3,3,2]).
