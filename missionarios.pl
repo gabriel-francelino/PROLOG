@@ -85,34 +85,32 @@ traduz(tc2, 'volta dois canibais').
 traduz(vmc, 'vai um missionário e um canibal').
 traduz(tmc, 'volta um missionário e um canibal').
 
-%operações para levar da margem 1 para 2
-oper(levaM, [M1,C1,M2,C2], [A,C1,B,C2]) :- 
-    M1>0, M2=<3, A is M1-1, B is M2+1, A>=C1, B>=C2.
-oper(levaC, [M1,C1,M2,C2], [M1,A,M2,B]) :-
-    C1>0, C2=<3, A is C1-1, B is C2+1, M1>=A, M2>=B.
-oper(levaMM, [M1,C1,M2,C2], [A,C1,B,C2]) :-
-    M1>0, M2=<3, A is M1-2, B is M2+2, A>=C1, B>=C2.
-oper(levaCC, [M1,C1,M2,C2], [M1,A,M2,B]) :-
-    C1>0, C2=<3, A is C1-2, B is C2+2, M1>=A, M2>=B.
-oper(levaMC, [M1,C1,M2,C2], [A,C,B,D]) :-
-    M1>0, M2=<3, C1>0, C2=<3,
+%operações para levar e trazer das margens
+oper(levaM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :- 
+    M1>0, M2=<3, L==1, A is M1-1, B is M2+1, A>=C1, B>=C2.
+oper(trazM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :- 
+    M2>0, M1=<3, L==2, A is M1+1, B is M2-1, A>=C1, B>=C2.
+oper(levaC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
+    C1>0, C2=<3, L==1, A is C1-1, B is C2+1, M1>=A, M2>=B.
+oper(trazC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
+    C2>0, C1=<3, L==2, A is C1+1, B is C2-1, M1>=A, M2>=B.
+oper(levaMM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :-
+    M1>0, M2=<3, L==1, A is M1-2, B is M2+2, A>=C1, B>=C2.
+oper(trazMM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :-
+    M2>0, M1=<3, L==2, A is M1+2, B is M2-2, A>=C1, B>=C2.
+oper(levaCC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
+    C1>0, C2=<3, L==1, A is C1-2, B is C2+2, M1>=A, M2>=B.
+oper(trazCC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
+    C2>0, C1=<3, L==2, A is C1+2, B is C2-2, M1>=A, M2>=B.
+oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
+    M1>0, M2=<3, L==1, C1>0, C2=<3,
     A is M1-1, B is M2+1, C is C1-1, D is C2+1,
     A>=C, B>=D.
-
-%operações para trazer da margem 2 para 1
-oper(trazM, [M1,C1,M2,C2], [A,C1,B,C2]) :- 
-    M2>0, M1=<3, A is M1+1, B is M2-1, A>=C1, B>=C2.
-oper(trazC, [M1,C1,M2,C2], [M1,A,M2,B]) :-
-    C2>0, C1=<3, A is C1+1, B is C2-1, M1>=A, M2>=B.
-oper(trazMM, [M1,C1,M2,C2], [A,C1,B,C2]) :-
-    M2>0, M1=<3, A is M1+2, B is M2-2, A>=C1, B>=C2.
-oper(trazCC, [M1,C1,M2,C2], [M1,A,M2,B]) :-
-    C2>0, C1=<3, A is C1+2, B is C2-2, M1>=A, M2>=B.
-oper(trazMC, [M1,C1,M2,C2], [A,C,B,D]) :-
-    M2>0, M1=<3, C2>0, C1=<3,
+oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
+    M2>0, M1=<3, L==2, C2>0, C1=<3,
     A is M1+1, B is M2-1, C is C1+1, D is C2-1,
     A>=C, B>=D.
 
-% [Ma,Ca,Mb,Cb], margem em que está cada elemento
-inicial([3,3,0,0]).
-meta([0,0,3,3]).
+% [Ma,Ca,Mb,Cb,L], margem em que está cada elemento
+inicial([3,3,0,0,1]).
+meta([0,0,3,3,2]).
