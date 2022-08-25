@@ -116,4 +116,3 @@ oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
 oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
     L==2, M2>0, C2>0, 
     A is M1+1, C is C1+1, B is M2-1, D is C2-1, seguro([A,C,B,D]).
-
