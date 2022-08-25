@@ -102,39 +102,39 @@ traduz(tmc, 'volta um missionário e um canibal').
 inicial([3,3,0,0,1]).
 meta([0,0,3,3,2]).
 
-seguro([M1,C1,M1,C2]) :- (M1>=C1;M1 is 0), ([M2>=C2;M2 is 0]).
+seguro([M1,C1,M2,C2]) :- (M1>=C1;M1 is 0), (M2>=C2;M2 is 0).
     
 %operações para levar e trazer das margens - prolog não esta considerando o ou (;)
 oper(levaM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :- 
-    L==1, M1>0, seguro([M1,C1,M1,C2]), 
-    A is M1-1, B is M2+1.
+    L==1, M1>0, 
+    A is M1-1, B is M2+1, seguro([A,C1,B,C2]).
 oper(trazM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :- 
-    L==2, M2>0, seguro([M1,C1,M1,C2]), 
-    A is M1+1, B is M2-1.
+    L==2, M2>0, 
+    A is M1+1, B is M2-1, seguro([A,C1,B,C2]).
 oper(levaC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
-    L==1, C1>0, seguro([M1,C1,M1,C2]), 
-    A is C1-1, B is C2+1.
+    L==1, C1>0, 
+    A is C1-1, B is C2+1, seguro([M1,A,M2,B]).
 oper(trazC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
-    L==2, C2>0, seguro([M1,C1,M1,C2]), 
-    A is C1+1, B is C2-1.
+    L==2, C2>0, 
+    A is C1+1, B is C2-1, seguro([M1,A,M2,B]).
 
 oper(levaMM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :-
-    L==1, M1>1, seguro([M1,C1,M1,C2]), 
-    A is M1-2, B is M2+2.
+    L==1, M1>1, 
+    A is M1-2, B is M2+2, seguro([A,C1,B,C2]).
 oper(trazMM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :-
-    L==2, M2>1, seguro([M1,C1,M1,C2]), 
-    A is M1+2, B is M2-2.
+    L==2, M2>1, 
+    A is M1+2, B is M2-2, seguro([A,C1,B,C2]).
 oper(levaCC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
-    L==1, C1>1, seguro([M1,C1,M1,C2]), 
-    A is C1-2, B is C2+2.
+    L==1, C1>1, 
+    A is C1-2, B is C2+2, seguro([M1,A,M2,B]).
 oper(trazCC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
-    L==2, C2>1, seguro([M1,C1,M1,C2]), 
-    A is C1+2, B is C2-2.
+    L==2, C2>1, 
+    A is C1+2, B is C2-2, seguro([M1,A,M2,B]).
 
 oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
-    L==1, M1>0, C1>0, seguro([M1,C1,M1,C2]), 
-    A is M1-1, C is C1-1, B is M2+1, D is C2+1.
+    L==1, M1>0, C1>0, 
+    A is M1-1, C is C1-1, B is M2+1, D is C2+1, seguro([A,C,B,D]).
 oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
-    L==2, M2>0, C2>0, seguro([M1,C1,M1,C2]), 
-    A is M1+1, C is C1+1, B is M2-1, D is C2-1.
+    L==2, M2>0, C2>0, 
+    A is M1+1, C is C1+1, B is M2-1, D is C2-1, seguro([A,C,B,D]).
 
