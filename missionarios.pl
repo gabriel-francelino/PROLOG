@@ -13,8 +13,10 @@ in(A,[_|B]) :- in(A,B).
 % 2 = profundidade
 estrategia(1).
 
+% Verifica se atingiu a meta.
 atingemeta([_-E|_]) :- meta(E).
 
+% Faz a busca atráz da solução.
 busca([Caminho|_], Solucao) :- atingemeta(Caminho), !, Solucao = Caminho.
 busca([Caminho|Lista], Solucao) :- 
    findall(UMAEXT, estende(Caminho,UMAEXT), EXT),
@@ -24,25 +26,27 @@ busca([Caminho|Lista], Solucao) :-
     Tipo = 2 -> ap(EXT, Lista, Lista1)),
    busca(Lista1, Solucao).
 
+% Verifica se o elemento repete.
 naorepete(_-X,C) :- not(in(_-X,C)).
 
 estende([OperacaoX-EstadoA|Caminho], [OperacaoY-EstadoB,OperacaoX-EstadoA|Caminho]) :-
    oper(OperacaoY,EstadoA,EstadoB),
    naorepete(OperacaoY-EstadoB,Caminho).
 
+% Linhas 34 - 64: Funções de imprimir o resultado.
 margem([M1,C1,M2,C2,_], X) :-
     (X=a -> forall(between(1,M1,_),write('M')), forall(between(1,C1,_),write('C')));
     (X=b -> forall(between(1,M2,_),write('M')), forall(between(1,C2,_),write('C'))).
 
 desenha(Estado) :-
-     write('    '), margem(Estado, a), write('|    |'), margem(Estado,b).
+     write('      '), margem(Estado, a), write('|      |'), margem(Estado,b).
 
 escreve([_-E]) :- write('Estado Inicial: '), write(E), nl, !.
 escreve([O-E|R]) :- 
     escreve(R), 
     write('Executando: '), 
     traduz(O,T),
-    write(T), write(' obtemos '), desenha(E),/* write(E),*/ nl.
+    write(T), write(' obtemos -->'), desenha(E),/* write(E),*/ nl.
 
 resolva :-
     inicial(X), 
@@ -62,13 +66,14 @@ traduz(trazCC, 'volta dois canibais').
 traduz(levaMC, 'vai um missionário e um canibal').
 traduz(trazMC, 'volta um missionário e um canibal').
 
-% [Ma,Ca,Mb,Cb,L], margem em que está cada elemento
+% [MissionárioA, CanibalA, MissionárioB, CanibalB, Lado do barco].
 inicial([3,3,0,0,1]).
 meta([0,0,3,3,2]).
 
+% Verifica se é seguro levar ou trazer.
 seguro([M1,C1,M2,C2]) :- (M1>=C1;M1 is 0), (M2>=C2;M2 is 0).
     
-%operações para levar e trazer das margens - prolog não esta considerando o ou (;)
+% Operações para levar e trazer das margens.
 oper(levaM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :- 
     L==1, M1>0, 
     A is M1-1, B is M2+1, seguro([A,C1,B,C2]).
@@ -101,4 +106,3 @@ oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
 oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
     L==2, M2>0, C2>0, 
     A is M1+1, C is C1+1, B is M2-1, D is C2-1, seguro([A,C,B,D]).
-
