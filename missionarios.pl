@@ -30,24 +30,9 @@ estende([OperacaoX-EstadoA|Caminho], [OperacaoY-EstadoB,OperacaoX-EstadoA|Caminh
    oper(OperacaoY,EstadoA,EstadoB),
    naorepete(OperacaoY-EstadoB,Caminho).
 
-margem([M,C], X) :-
-   (X==1, M==3 -> write('MMM'); write(' ')),
-   (X==1, M==2 -> write('MM'); write(' ')),
-   (X==1, M==1 -> write('M'); write(' ')),
-   (X==1, M==0 -> write(''); write(' ')),
-   (X==1, C==3 -> write('CCC'); write(' ')),
-   (X==1, C==2 -> write('CC'); write(' ')),
-   (X==1, C==1 -> write('C'); write(' ')),
-   (X==1, C==0 -> write(''); write(' ')),
-   (X==2, M==3 -> write('MMM'); write(' ')),
-   (X==2, M==2 -> write('MM'); write(' ')),
-   (X==2, M==1 -> write('M'); write(' ')),
-   (X==2, M==0 -> write(''); write(' ')),
-   (X==2, C==3 -> write('CCC'); write(' ')),
-   (X==2, C==2 -> write('CC'); write(' ')),
-   (X==2, C==1 -> write('C'); write(' ')),
-   (X==2, C==0 -> write(''); write(' ')).
-
+margem([M1,C1,M2,C2,_], X) :-
+    (X=a -> forall(between(1,M1,_),write('M')), forall(between(1,C1,_),write('C')));
+    (X=b -> forall(between(1,M2,_),write('M')), forall(between(1,C2,_),write('C'))).
 
 desenha(Estado) :-
      write('    '), margem(Estado, a), write('|    |'), margem(Estado,b).
@@ -57,7 +42,7 @@ escreve([O-E|R]) :-
     escreve(R), 
     write('Executando: '), 
     traduz(O,T),
-    write(T), write(' obtemos '), /*desenha(E),*/ write(E), nl.
+    write(T), write(' obtemos '), desenha(E),/* write(E),*/ nl.
 
 resolva :-
     inicial(X), 
@@ -66,37 +51,16 @@ resolva :-
     escreve(S),
     write('que é a solução do problema').
 
-%-----------------------------------
-% Especificacao do problema
-%-----------------------------------
-
-% traduz(c1, 'encher o jarro 1  ').
-% traduz(c2, 'encher o jarro 2  ').
-% traduz(v1, 'esvaziar o jarro 1').
-% traduz(v2, 'esvaziar o jarro 2').
-% traduz(12, 'despejar 1 em 2   ').
-% traduz(21, 'despejar 2 em 1   ').
-% inicial([0,0]).
-% meta([_,2]).
-% oper(c1, [X,Y], [3,Y]) :- X < 3.
-% oper(c2, [X,Y], [X,4]) :- Y < 4.
-% oper(v1, [X,Y], [0,Y]) :- X > 0.
-% oper(v2, [X,Y], [X,0]) :- Y > 0.
-% oper(12, [X,Y], [0,Y1]) :- X > 0, Y < 4, Y1 is X + Y, Y1 =< 4.
-% oper(12, [X,Y], [X1,4]) :- X > 0, Y < 4, X1 is X + Y - 4, X + Y > 4.
-% oper(21, [X,Y], [X1,0]) :- Y > 0, X < 3, X1 is X + Y, X1 =< 3.
-% oper(21, [X,Y], [3,Y1]) :- Y > 0, X < 3, Y1 is X + Y - 3, X + Y > 3.
-
-traduz(vm1, 'vai um missionário').
-traduz(tm1, 'volta um missionário').
-traduz(vm2, 'vai dois missionários').
-traduz(tm2, 'volta dois missionários').
-traduz(vc1, 'vai um canibal').
-traduz(tc1, 'volta um canibal').
-traduz(vc2, 'vai dois canibais').
-traduz(tc2, 'volta dois canibais').
-traduz(vmc, 'vai um missionário e um canibal').
-traduz(tmc, 'volta um missionário e um canibal').
+traduz(levaM, 'vai um missionário').
+traduz(trazM, 'volta um missionário').
+traduz(levaMM, 'vai dois missionários').
+traduz(trazMM, 'volta dois missionários').
+traduz(levaC, 'vai um canibal').
+traduz(trazC, 'volta um canibal').
+traduz(levaCC, 'vai dois canibais').
+traduz(trazCC, 'volta dois canibais').
+traduz(levaMC, 'vai um missionário e um canibal').
+traduz(trazMC, 'volta um missionário e um canibal').
 
 % [Ma,Ca,Mb,Cb,L], margem em que está cada elemento
 inicial([3,3,0,0,1]).
