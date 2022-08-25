@@ -102,35 +102,39 @@ traduz(tmc, 'volta um missionário e um canibal').
 inicial([3,3,0,0,1]).
 meta([0,0,3,3,2]).
 
-% seguro(lM,M1,C1,T) :- X is M1-T, Y is 3-C1, Z is Y-3-M1, (X==0; X>=C1), (Y==0; Z=<T).
-% seguro(lC,M1,C1,T) :- X is 3-M1, Y is X-3-C1, (X==0); (Y>=T).
-% seguro(lMC,M1,C1) :- X is 3-C1, Y is 3-M1, (X==0); (X)=<(Y).
-
-seguro(lM,M1,C1,T) :- (X==0; X>=C1), (Y==0; Z=<T), X is M1-T, Y is 3-C1, Z is Y-3-M1.
-seguro(lC,M1,C1,T) :- (X==0); (Y>=T), X is 3-M1, Y is X-3-C1.
-seguro(lMC,M1,C1) :- (X==0); (X)=<(Y), X is 3-C1, Y is 3-M1.
+seguro([M1,C1,M1,C2]) :- (M1>=C1;M1 is 0), ([M2>=C2;M2 is 0]).
     
 %operações para levar e trazer das margens - prolog não esta considerando o ou (;)
 oper(levaM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :- 
-    M1>=1, L==1, seguro(lM,M1,C1,1), A is M1-1, B is M2+1.
+    L==1, M1>0, seguro([M1,C1,M1,C2]), 
+    A is M1-1, B is M2+1.
 oper(trazM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :- 
-    M2>=1, L==2, seguro(lM,M2,C2,1), A is M1+1, B is M2-1.
+    L==2, M2>0, seguro([M1,C1,M1,C2]), 
+    A is M1+1, B is M2-1.
 oper(levaC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
-    C1>=1, L==1, seguro(lC,M1,C1,1), A is C1-1, B is C2+1.
+    L==1, C1>0, seguro([M1,C1,M1,C2]), 
+    A is C1-1, B is C2+1.
 oper(trazC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
-    C2>=1, L==2, seguro(lC,M2,C2,1), A is C1+1, B is C2-1.
+    L==2, C2>0, seguro([M1,C1,M1,C2]), 
+    A is C1+1, B is C2-1.
 
 oper(levaMM, [M1,C1,M2,C2,L], [A,C1,B,C2,2]) :-
-    M1>=2, L==1, seguro(lM,M1,C1,2), A is M1-2, B is M2+2.
+    L==1, M1>1, seguro([M1,C1,M1,C2]), 
+    A is M1-2, B is M2+2.
 oper(trazMM, [M1,C1,M2,C2,L], [A,C1,B,C2,1]) :-
-    M2>=2, L==2, seguro(lM,M2,C2,2), A is M1+2, B is M2-2.
+    L==2, M2>1, seguro([M1,C1,M1,C2]), 
+    A is M1+2, B is M2-2.
 oper(levaCC, [M1,C1,M2,C2,L], [M1,A,M2,B,2]) :-
-    C1>=2, L==1, seguro(lC,M1,C1,2), A is C1-2, B is C2+2.
+    L==1, C1>1, seguro([M1,C1,M1,C2]), 
+    A is C1-2, B is C2+2.
 oper(trazCC, [M1,C1,M2,C2,L], [M1,A,M2,B,1]) :-
-    C2>=2, L==2, seguro(lC,M2,C2,2), A is C1+2, B is C2-2.
+    L==2, C2>1, seguro([M1,C1,M1,C2]), 
+    A is C1+2, B is C2-2.
 
 oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
-    M1>=1, C1>=1, L==1, seguro(lM,M1,C1), A is M1-1, B is M2+1, C is C1-1, D is C2+1.
+    L==1, M1>0, C1>0, seguro([M1,C1,M1,C2]), 
+    A is M1-1, C is C1-1, B is M2+1, D is C2+1.
 oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
-    M2>=1, C2>=1, L==2, seguro(lM,M2,C2), A is M1+1, B is M2-1, C is C1+1, D is C2-1.
+    L==2, M2>0, C2>0, seguro([M1,C1,M1,C2]), 
+    A is M1+1, C is C1+1, B is M2-1, D is C2-1.
 
