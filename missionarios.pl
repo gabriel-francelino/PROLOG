@@ -34,12 +34,22 @@ estende([OperacaoX-EstadoA|Caminho], [OperacaoY-EstadoB,OperacaoX-EstadoA|Caminh
    naorepete(OperacaoY-EstadoB,Caminho).
 
 % Linhas 34 - 64: Funções de imprimir o resultado.
+% margem([M1,C1,M2,C2,_], X) :-
+%     (X=a -> forall(between(1,M1,_),write('M')), forall(between(1,C1,_),write('C')));
+%     (X=b -> forall(between(1,M2,_),write('M')), forall(between(1,C2,_),write('C'))).
+
+impM(P,I) :- 
+    (I =< P -> write('M'); write(' ')).
+
+impC(P,I) :- 
+    (I =< P -> write('C'); write(' ')).
+
 margem([M1,C1,M2,C2,_], X) :-
-    (X=a -> forall(between(1,M1,_),write('M')), forall(between(1,C1,_),write('C')));
-    (X=b -> forall(between(1,M2,_),write('M')), forall(between(1,C2,_),write('C'))).
+    (X=a -> forall(between(1,6,A),impM(M1,A)), forall(between(1,6,B),impC(C1,B)));
+    (X=b -> forall(between(1,6,A),impM(M2,A)), forall(between(1,6,B),impC(C2,B))).
 
 desenha(Estado) :-
-     write('      '), margem(Estado, a), write('|      |'), margem(Estado,b).
+     write('      '), margem(Estado, a), write('|      | '), margem(Estado,b).
 
 escreve([_-E]) :- write('Estado Inicial: '), write(E), nl, !.
 escreve([O-E|R]) :- 
@@ -55,16 +65,16 @@ resolva :-
     escreve(S),
     write('que é a solução do problema').
 
-traduz(levaM, 'vai um missionário').
-traduz(trazM, 'volta um missionário').
-traduz(levaMM, 'vai dois missionários').
-traduz(trazMM, 'volta dois missionários').
-traduz(levaC, 'vai um canibal').
-traduz(trazC, 'volta um canibal').
-traduz(levaCC, 'vai dois canibais').
-traduz(trazCC, 'volta dois canibais').
-traduz(levaMC, 'vai um missionário e um canibal').
-traduz(trazMC, 'volta um missionário e um canibal').
+traduz(levaM, 'vai um missionário                 ').
+traduz(trazM, 'volta um missionário              ').
+traduz(levaMM, 'vai dois missionários             ').
+traduz(trazMM, 'volta dois missionários           ').
+traduz(levaC, 'vai um canibal                     ').
+traduz(trazC, 'volta um canibal                  ').
+traduz(levaCC, 'vai dois canibais                 ').
+traduz(trazCC, 'volta dois canibais               ').
+traduz(levaMC, 'vai um missionário e um canibal   ').
+traduz(trazMC, 'volta um missionário e um canibal ').
 
 % [MissionárioA, CanibalA, MissionárioB, CanibalB, Lado do barco].
 inicial([3,3,0,0,1]).
@@ -106,3 +116,4 @@ oper(levaMC, [M1,C1,M2,C2,L], [A,C,B,D,2]) :-
 oper(trazMC, [M1,C1,M2,C2,L], [A,C,B,D,1]) :-
     L==2, M2>0, C2>0, 
     A is M1+1, C is C1+1, B is M2-1, D is C2-1, seguro([A,C,B,D]).
+
